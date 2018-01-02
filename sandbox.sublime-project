@@ -1,0 +1,20 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"._*"
+			],
+			"folder_exclude_patterns":
+			[
+				"node_modules",
+				"env",
+				"retired",
+				"lib",
+				"js"
+			],
+			"path": "."
+		}
+	]
+}
