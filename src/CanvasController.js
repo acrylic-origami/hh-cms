@@ -25,10 +25,10 @@ export default class extends React.Component {
 	constructor(props: TCanvasControllerProps) {
 		super(props);
 		this.state = {
-			active: false,
+			active: true,
 			hover: false,
-			width: this.props.width || 0,
-			height: this.props.height || 0,
+			width: props.width,
+			height: props.height,
 			projection: null, // avoid singularities
 			screen: null
 		};
@@ -46,14 +46,13 @@ export default class extends React.Component {
 		});
 	};
 	_canvas_key_handler = (e) => {
-		console.log(e.keyCode);
 		if(e.keyCode === 27) // escape
 			this.setState({
 				active: false
 			});
 	}
 	_canvas_hover_handler = (hover: bool) => {
-		this.hover = hover
+		this.setState({ hover });
 	};
 	_resize_canvas = () => {
 		const width = (this.props.width || (this.props.size_parent ? this.props.size_parent.offsetWidth : window.innerWidth)) * window.devicePixelRatio;
@@ -63,8 +62,8 @@ export default class extends React.Component {
 			height,
 			projection: height !== 0 ? makePerspective(FOVY, width / height, 1, 100) : null,
 			screen: $M([
-				[width, 0, 0, width / 2],
-				[0, height, 0, height / 2],
+				[-width, 0, 0, width / 2],
+				[0, -height, 0, height / 2],
 				[0, 0, 1, 0],
 				[0, 0, 0, 1]
 			])
@@ -78,12 +77,14 @@ export default class extends React.Component {
 	componentDidMount(): void {
 		this._resize_canvas();
 		window.addEventListener('resize', this._resize_canvas);
+		window.addEventListener('keyup', this._canvas_key_handler);
 		
-		if(this.active)
+		if(this.state.active)
 			window.requestAnimationFrame(this.draw);
 		
 		this._componentDidMount();
 	}
+	_componentWillUpdate(nextProps, nextState): void {} // abstract
 	componentWillUpdate(nextProps, nextState): void {
 		// avoid infinite loop from state setting
 		if(this.props.width !== nextProps.width || this.props.height !== nextProps.height || this.props.size_parent !== nextProps.size_parent)
@@ -91,12 +92,13 @@ export default class extends React.Component {
 		
 		if(!this.state.active && nextState.active)
 			window.requestAnimationFrame(this.draw);
+		
+		this._componentWillUpdate(nextProps, nextState);
 	}
 	render() {
-		return <div className={'canvas-container' + (this.active ? ' active' : '')}>
+		return <div className={'canvas-container' + (this.state.active ? ' active' : '')}>
 			<canvas ref={this._reffer}
 			        onClick={this._canvas_click_handler}
-			        onKeyUp={this._canvas_key_handler}
 			        width={this.state.width}
 			        height={this.state.height}
 			        onMouseEnter={() => this._canvas_hover_handler(true)}

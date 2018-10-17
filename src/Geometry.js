@@ -9,7 +9,7 @@ export interface Geometry<TContext: RenderingContext> {
 
 export const DEFAULT_STROKE_STYLE = {
 	strokeStyle: '#F2273B',
-	lineWidth: 3,
+	lineWidth: 8,
 	lineCap: 'butt',
 	lineJoin: 'miter',
 	miterLimit: 10.0
