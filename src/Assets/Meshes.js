@@ -3,6 +3,17 @@ import {Set} from 'immutable';
 import Mesh from '../Mesh/Mesh';
 import MeshPoint from '../Mesh/MeshPoint';
 
+export const line = new Mesh([
+	[[1, 0], [1]],
+	[[0, 1], [0]]
+].map(([coord, adjs]) => new MeshPoint($V(coord), adjs)));
+
+export const simplex = new Mesh([
+	[[-0.5, -1], [1, 2]],
+	[[0.5, -1], [0, 2]],
+	[[0, 1], [0, 1]]
+].map(([coord, adjs]) => new MeshPoint($V(coord), adjs)));
+
 export const logo = new Mesh([
 	[[-6.55625,20.54375],[1,5]],
 	[[12.54375,9.54375],[2,6,0]],
