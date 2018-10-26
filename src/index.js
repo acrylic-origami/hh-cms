@@ -58,52 +58,82 @@ window.addEventListener('load', () => {
 	const PX_PER_PT = 220 * pixel_ratio;
 	const DELTA_THRESH = 0.0001; // steady-state
 	
-	({
- 		current: $V([ (Math.random() - 0.5) * ANGULAR_RANGE.e(1), (Math.random() - 0.5) * ANGULAR_RANGE.e(2) ]),
- 		draw: function(t) {
- 			window.requestAnimationFrame(this.draw.bind(this));
-			
- 			// logo sharding
- 			const delta = target.subtract(this.current);
- 			if(delta.modulus() > DELTA_THRESH || resized) {
- 				if(resized) {
- 					for(const prop in DEFAULT_STROKE_STYLE) {
- 						if(DEFAULT_STROKE_STYLE.hasOwnProperty(prop))
- 							ctx[prop] = DEFAULT_STROKE_STYLE[prop];
- 					}
- 					resized = false;
- 				}
- 				ctx.save();
- 				ctx.fillStyle = '#4d3d59';
- 				ctx.fillRect(0, 0, canvas.width, canvas.height);
- 				ctx.restore();
- 				
- 				this.current = this.current.add(delta.x(GAIN));
- 				const R = XY2M(this.current.e(2), this.current.e(1));
- 				// console.log(Math.sin(this.current.e(0)));
- 				// console.log(R.inspect());
- 				
- 				for(const path of paths) {
- 					ctx.beginPath();
- 					let first_point = true;
- 					for(const point of path) {
- 						const P0_ray = R.x(point).subtract(P0);
- 						const draw_point_P = P0_ray.x(d_0_SCREEN.modulus() / P0_ray.e(3));
- 						const draw_point = draw_point_P.add(P0);
- 						// console.log(point.inspect(), world_point.inspect());
- 						
- 						(() => {
- 							if(first_point) {
- 								first_point = false;
- 								return ctx.moveTo.bind(ctx);
- 							}
- 							else
- 								return ctx.lineTo.bind(ctx);
- 						})()(draw_point.e(1) * PX_PER_PT + canvas.width / 2, -draw_point.e(2) * PX_PER_PT + canvas.height / 2);
- 					}
- 					ctx.stroke();
- 				}
- 			}
+	const F_bg = Q.all(['img/graphics/pattern.png', 'img/graphics/pattern-b.png'].map(src => {
+		const e = new Image(32 * pixel_ratio, 32 * pixel_ratio);
+		const D = Q.defer();
+		e.src = src;
+		e.onload = () => D.resolve(e);
+		return D;
+	}));
+	const F_fins = Q.all([1, 2, 3, 4].map(idx => {
+		const e = new Image();
+		const D = Q.defer();
+		e.src = `img/graphics/fins/${idx}.png`;
+		e.onload = () => D.resolve(e);
+		return D;
+	}));
+	
+	Q.all([F_bg, F_fins]).then(([[ h_pattern, h_pattern_b ], h_fins]) => {
+		({
+	 		current: $V([ (Math.random() - 0.5) * ANGULAR_RANGE.e(1), (Math.random() - 0.5) * ANGULAR_RANGE.e(2) ]),
+	 		draw: function(t) {
+	 			window.requestAnimationFrame(this.draw.bind(this));
+	 			
+	 			const SCALE = art_scale_from_width(canvas.getBoundingClientRect().width) * pixel_ratio; // [0, 1] -> true pixels
+	 			const SAFETY_MARGIN = 0.02;
+	 			
+	 			const fin_ground = [467/1280, 319/1280]; // width-relative pixels
+	 			for(const h_fin of h_fins) {
+	 				const aspect_ratio = h_fin.width / h_fin.height;
+	 				const true_height = (1 + SAFETY_MARGIN) * fin_ground[1];
+	 				ctx.drawImage(h_fin, fin_ground[0] * SCALE, fin_ground[1] * SCALE, true_height * aspect_ratio, true_height);
+	 			}
+	 			
+	 			
+	 			// logo sharding
+	 			() => {
+		 			const delta = target.subtract(this.current);
+		 			if(delta.modulus() > DELTA_THRESH || resized) {
+		 				if(resized) {
+		 					for(const prop in DEFAULT_STROKE_STYLE) {
+		 						if(DEFAULT_STROKE_STYLE.hasOwnProperty(prop))
+		 							ctx[prop] = DEFAULT_STROKE_STYLE[prop];
+		 					}
+		 					resized = false;
+		 				}
+		 				ctx.save();
+		 				ctx.fillStyle = '#4d3d59';
+		 				ctx.fillRect(0, 0, canvas.width, canvas.height);
+		 				ctx.restore();
+		 				
+		 				this.current = this.current.add(delta.x(GAIN));
+		 				const R = XY2M(this.current.e(2), this.current.e(1));
+		 				// console.log(Math.sin(this.current.e(0)));
+		 				// console.log(R.inspect());
+		 				
+		 				for(const path of paths) {
+		 					ctx.beginPath();
+		 					let first_point = true;
+		 					for(const point of path) {
+		 						const P0_ray = R.x(point).subtract(P0);
+		 						const draw_point_P = P0_ray.x(d_0_SCREEN.modulus() / P0_ray.e(3));
+		 						const draw_point = draw_point_P.add(P0);
+		 						// console.log(point.inspect(), world_point.inspect());
+		 						
+		 						(() => {
+		 							if(first_point) {
+		 								first_point = false;
+		 								return ctx.moveTo.bind(ctx);
+		 							}
+		 							else
+		 								return ctx.lineTo.bind(ctx);
+		 						})()(draw_point.e(1) * PX_PER_PT + canvas.width / 2, -draw_point.e(2) * PX_PER_PT + canvas.height / 2);
+		 					}
+		 					ctx.stroke();
+		 				}
+		 			}
+		 		};
+	 		}
 	 	}).draw(performance.now());
 	 });
 }); // new Polyline([$V([-0.5, -0.5, 0]), $V([0.5, -0.5, 0]), $V([0, 0.5, 0])])
