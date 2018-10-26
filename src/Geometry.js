@@ -7,7 +7,7 @@
 // 	draw(ctx: TContext, projection: Matrix): void;
 // }
 export const DEFAULT_STROKE_STYLE = {
-	strokeStyle: '#F2273B',
+	strokeStyle: '#FFFFFF',
 	lineWidth: 3,
 	lineCap: 'butt',
 	lineJoin: 'miter',
