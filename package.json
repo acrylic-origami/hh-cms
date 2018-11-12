@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "immutable": "^3.8.2",
+    "proton-js": "^3.1.2",
     "react": "~16.2",
     "react-dom": "~16.2",
     "sylvester": "0.0.21"
