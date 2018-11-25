@@ -38,10 +38,11 @@ class ShadowProject extends Common {
 		$x_hero = null;
 		/* HH_IGNORE_ERROR[2050] */
 		$page_dir = __DIR__ . '/../../public/project_assets' . substr($_SERVER['REQUEST_URI'], strlen('/projects'));
-		/* HH_IGNORE_ERROR[2050] */
-		if(\file_exists("{$page_dir}/hero/index.html")) // not great this location is constant but whatever
+		$dynamic_hero = vec['hero.html', 'hero/index.html', 'hero/public/index.html']
+			|> C\find($$, $f ==> \file_exists($f));
+		if($dynamic_hero !== null) // not great this location is constant but whatever
 			$x_hero = <section id="hero">
-				<iframe src="./hero/index.html" />
+				<iframe src={$dynamic_hero} />
 			</section>;
 		elseif($this->post['thumb'] !== null)
 			$x_hero = <section id="hero" style={"background-image:url({$this->post['hero']});"} />;

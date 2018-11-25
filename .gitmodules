@@ -1,0 +1,6 @@
+[submodule "public/project_assets/slice/slice"]
+	path = public/project_assets/slice/hero
+	url = https://github.com/acrylic-origami/slice.git
+[submodule "public/project_assets/logo-sketches/shard/shard"]
+	path = public/project_assets/logo-sketches/shard/shard
+	url = https://github.com/acrylic-origami/shard.git

@@ -1,1 +1,6 @@
 .DS_Store
+*.ast
+*.ai
+*.psd
+*.aep
+Adobe After Effects Auto-Save
