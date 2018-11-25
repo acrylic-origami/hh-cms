@@ -1,0 +1,11 @@
+{
+    "require": {
+        "facebook/fbmarkdown": "^1.4",
+        "facebook/xhp-lib": "^2.8"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"LamIO\\": "hh-src/psr4"
+    	}
+    }
+}

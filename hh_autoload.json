@@ -1,0 +1,5 @@
+{
+    "roots": [ "hh-src/pages", "hh-src/xhp-root",  "hh-src/shadow-public" ],
+    "devRoots": [],
+    "devFailureHandler": "Facebook\\AutoloadMap\\HHClientFallbackHandler"
+}
