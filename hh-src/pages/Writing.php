@@ -126,7 +126,7 @@ class Writing extends Common {
 									</article>;
 								}
 								else {
-									$thumb = $bag['hero'] != null ? "blog_asets/{$bag['hero']}" : '';
+									$thumb = $bag['hero'] != null ? "blog_assets/{$bag['hero']}" : '';
 									return <article class="featured">
 										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
 										<header>
@@ -142,7 +142,7 @@ class Writing extends Common {
 											{$x_content}
 										</div>
 										<div class="readmore-container">
-											<a href="blog/{$bag['location']}" style="border-color:#000;" class="button-like">Read more &rarr;</a>
+											<a href={"blog/{$bag['location']}"} style="border-color:#000;" class="button-like">Read more &rarr;</a>
 										</div>
 									</article>;
 								}

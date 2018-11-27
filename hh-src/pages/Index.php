@@ -14,7 +14,7 @@ class Index extends Common {
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
 		$projects_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/project_assets');
-		$writing_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/blog')
+		$writing_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/blog_assets')
 			|> Vec\sort($$, ($a, $b) ==> $b['mtime'] - $a['mtime']);
 			
 		return <x:frag>
@@ -110,7 +110,7 @@ class Index extends Common {
 										return <li class="grid-item project">
 											<span>{date("M Y", $bag['mtime'])}</span>
 											<div class="work-thumbnail" style={"background-image:url({$thumb});"}></div>
-											<h3><a href={"project_assets/{$bag['location']}"} target="_blank">{$title}</a></h3>
+											<h3><a href={"/{$bag['location']}"} target="_blank">{$title}</a></h3>
 											{$x_meta}
 											<div class="post-body">
 												{new \MarkdownRenderable($this->renderer_struct, Vec\slice($bag['content']->getChildren(), $content_offset, 5))}
@@ -148,7 +148,7 @@ class Index extends Common {
 										
 										return <li class="writing-item">
 											<header>
-												<h2><a href={"project_assets/{$bag['location']}"}>{$title}</a></h2>
+												<h2><a href={"blog/{$bag['location']}"}>{$title}</a></h2>
 												<!-- {$x_cats} -->
 												<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
 											</header>

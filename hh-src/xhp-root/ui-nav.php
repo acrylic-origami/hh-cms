@@ -19,7 +19,7 @@ class :ui:nav extends :x:element {
 				</li>
 				<li class={"page-nav" . (preg_match('/^\/(index\.[^\/]+)?$/', $request_uri) ? ' selected' : '')}><a href="/">Home</a></li>
 				<li class={"page-nav" . (preg_match('/^\/projects(\.[^\/]+)?(\/.*)?$/', $request_uri) ? ' selected' : '')}><a href="/projects.php">Projects</a></li>
-				<li class={"page-nav" . (preg_match('/^\/(writing|blog)(\.[^\/]+)?\/?$/', $request_uri) ? ' selected' : '')}><a href="/writing.php">Writing</a></li>
+				<li class={"page-nav" . (preg_match('/^\/(writing|blog)(\.[^\/]+)?(\/.*)?$/', $request_uri) ? ' selected' : '')}><a href="/writing.php">Writing</a></li>
 				<li class="page-nav"><a href="/#contact">Contact</a></li>
 			</ul>
 		</nav>;
