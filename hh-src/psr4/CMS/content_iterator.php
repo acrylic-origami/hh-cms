@@ -5,7 +5,8 @@ use namespace Facebook\Markdown;
 use namespace Facebook\Markdown\{Blocks, Inlines};
 use namespace HH\Lib\{C, Str, Vec, Dict};
 function content_iterator(MDRendererStruct<string> $renderer_struct, string $root_path, string $path = ''): vec<PostBag> {
-	return vec(new \DirectoryIterator("{$root_path}/{$path}"))
+	$base = "{$root_path}/{$path}";
+	return vec(new \DirectoryIterator($base))
 		|> C\reduce($$, ($acc, $v) ==> {
 			if($v->isDir() && !$v->isDot()) {
 				return content_iterator($renderer_struct, $root_path, "{$path}/{$v->getFilename()}")
@@ -45,6 +46,7 @@ function content_iterator(MDRendererStruct<string> $renderer_struct, string $roo
 				return Vec\concat($acc, vec[shape(
 					// 'title' => $title,
 					'location' => \ltrim($path, '/'),
+					'base' => $base,
 					'content' => $ast, // new \MarkdownRenderable($renderer_struct, Vec\slice($ast->getChildren(), $content_offset, 5)),
 					'ctime' => \filectime("{$root_path}/{$basepath}.md"),
 					'mtime' => \filemtime("{$root_path}/{$basepath}.md"),
