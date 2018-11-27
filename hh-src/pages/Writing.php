@@ -18,9 +18,7 @@ class Writing extends Common {
 	}
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
-		$content = vec['project_assets', 'blog']
-			|> Vec\map($$, $type ==> LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . "/../../public/{$type}"))
-			|> Vec\flatten($$)
+		$content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . "/../../public/blog_assets")
 			|> Vec\sort($$, ($a, $b) ==> $b['mtime'] - $a['mtime']);
 		return <x:frag>
 			<header>
@@ -114,11 +112,11 @@ class Writing extends Common {
 									</ul>;
 								}
 								if($meta === null || $meta['featured'] === false) {
-									$thumb = $bag['thumb'] != null ? "project_assets/{$bag['thumb']}" : '';
+									$thumb = $bag['thumb'] != null ? "blog_assets/{$bag['thumb']}" : '';
 									return <article class="unfeatured">
-										<a href={"/projects/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
+										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
 										<header>
-											<a href={"/projects/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
+											<a href={"/blog/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
 											{$x_cats}
 											<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
 										</header>
@@ -128,15 +126,15 @@ class Writing extends Common {
 									</article>;
 								}
 								else {
-									$thumb = $bag['hero'] != null ? "project_assets/{$bag['hero']}" : '';
+									$thumb = $bag['hero'] != null ? "blog_asets/{$bag['hero']}" : '';
 									return <article class="featured">
-										<a href={"/projects/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
+										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
 										<header>
-											<a href={"/projects/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
+											<a href={"/blog/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
 											{$x_cats}
 											<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
 											<div class="ctas">
-												<a href={"/projects/{$bag['location']}"}>Read more &rarr;</a>
+												<a href={"/blog/{$bag['location']}"}>Read more &rarr;</a>
 												<span class="collapse"></span>
 											</div>
 										</header>
@@ -144,7 +142,7 @@ class Writing extends Common {
 											{$x_content}
 										</div>
 										<div class="readmore-container">
-											<a href="projects/HHReactor" style="border-color:#000;" class="button-like">Read more &rarr;</a>
+											<a href="blog/{$bag['location']}" style="border-color:#000;" class="button-like">Read more &rarr;</a>
 										</div>
 									</article>;
 								}

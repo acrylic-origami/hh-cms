@@ -2,5 +2,8 @@
 	path = public/project_assets/slice/hero
 	url = https://github.com/acrylic-origami/slice.git
 [submodule "public/project_assets/logo-sketches/shard/shard"]
-	path = public/project_assets/logo-sketches/shard/shard
+	path = public/blog_assets/logo-sketches/shard/hero
+	url = https://github.com/acrylic-origami/shard.git
+[submodule "shard"]
+	path = public/blog_assets/logo-sketches/shard/hero
 	url = https://github.com/acrylic-origami/shard.git

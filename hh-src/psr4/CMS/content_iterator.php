@@ -15,7 +15,7 @@ function content_iterator(MDRendererStruct<string> $renderer_struct, string $roo
 				$basename = $v->getBasename('.md');
 				$basepath = "{$path}/{$basename}";
 				$ast_fullpath = "{$root_path}/{$basepath}.ast";
-				if(\file_exists($ast_fullpath) && \filemtime($ast_fullpath) > \filemtime($v->getPath())) {
+				if(\file_exists($ast_fullpath) && \filemtime($ast_fullpath) > \filemtime($v->getPathname())) {
 					$ast = \unserialize(\file_get_contents($ast_fullpath)) as Markdown\Blocks\Document;
 				}
 				else {

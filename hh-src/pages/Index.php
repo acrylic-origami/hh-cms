@@ -15,7 +15,6 @@ class Index extends Common {
 	public function render_body(): \XHPRoot {
 		$projects_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/project_assets');
 		$writing_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/blog')
-			|> Vec\concat($$, $projects_content)
 			|> Vec\sort($$, ($a, $b) ==> $b['mtime'] - $a['mtime']);
 			
 		return <x:frag>
@@ -43,7 +42,7 @@ class Index extends Common {
 					<div>{"This is Derek Lam's personal site."}</div>
 					<div>{"Let's get personal."}</div>
 					<div>{"Scroll, I'll tell you a bit about myself."}</div>
-					<div>{"Or just enjoy the "}<a href="projects/logo-sketches/shard" target="_blank">Shard</a>{" demo shown above"}</div>
+					<div>{"Or just enjoy the "}<a href="blog/logo-sketches/shard" target="_blank">Shard</a>{" demo shown above"}</div>
 				</div>
 			</section>
 			<section id="about">
@@ -122,12 +121,12 @@ class Index extends Common {
 						</ul>
 					</section><!--
 				--><section id="writing">
+						<a href="writing.php" class="work-cta button-like" style="border-color:#FFF">All Writing</a>
 						<h1>Writing</h1>
-						<a href="writing.php" class="work-cta button-like" style="border-color:#FFF">All Projects</a>
 						<ol>
 							{
 								/* TODO: reduce this redundancy with Writing */
-								Vec\slice($projects_content, 0, 10)
+								Vec\slice($writing_content, 0, 10)
 									|> Vec\map($$, $bag ==> {
 										$ast_title = LamIO\CMS\title_from_AST($bag['content']);
 										$content_offset = 0;

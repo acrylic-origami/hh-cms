@@ -1,7 +1,7 @@
 <?hh // strict
 use LamIO\Page;
 use namespace LamIO\CMS;
-use namespace HH\Lib\{C, Str, Vec};
+use namespace HH\Lib\{C, Str, Vec, Dict};
 use namespace Facebook\Markdown;
 class ShadowProject extends Common {
 	<<__Override>>
@@ -47,6 +47,21 @@ class ShadowProject extends Common {
 		elseif($this->post['thumb'] !== null)
 			$x_hero = <section id="hero" style={"background-image:url({$this->post['hero']});"} />;
 		
+		$meta = $this->post['meta'];
+		$x_meta = null;
+		if($meta != null && array_key_exists('meta', $meta)) {
+			$meta_dict = $meta['meta'];
+			invariant(is_array($meta_dict), '');
+			$x_meta = <dl>
+				{Dict\map_with_key(dict($meta_dict), ($k, $v) ==> 
+					<x:frag>
+						<dt>{$k}</dt>
+						<dd>{new \MarkdownRenderable($this->renderer_struct, Markdown\parse($this->renderer_struct['pctx'], $v)->getChildren())}</dd>
+					</x:frag>
+				)}
+			</dl>;
+		}
+		
 		return <x:frag>
 			<header>
 				<a href="#main_content" id="skip_to_main">Skip to main content</a>
@@ -64,10 +79,9 @@ class ShadowProject extends Common {
 					{new \MarkdownRenderable($this->renderer_struct, Vec\slice($this->post['content']->getChildren(), $content_offset))}
 				</section>
 				<section class="aux-pane">
-					
+					{$x_meta}
 				</section>
 				<section class="aux-pane">
-					
 				</section>
 			</section>
 			<ui:footer />
