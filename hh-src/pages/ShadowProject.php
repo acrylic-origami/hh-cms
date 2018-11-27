@@ -52,10 +52,16 @@ class ShadowProject extends Common {
 			$meta_dict = $meta['meta'];
 			invariant(is_array($meta_dict), '');
 			$x_meta = <dl>
-				{Dict\map_with_key(dict($meta_dict), ($k, $v) ==> 
+				{Dict\map_with_key(dict($meta_dict), ($k, $v_list) ==> 
 					<x:frag>
 						<dt>{$k}</dt>
-						<dd>{new \MarkdownRenderable($this->renderer_struct, Markdown\parse($this->renderer_struct['pctx'], $v)->getChildren())}</dd>
+						<dd>{
+							is_array($v_list) ? $v_list : vec[$v_list]
+							|> Vec\map($$, $v ==>
+								Markdown\parse($this->renderer_struct['pctx'], $v)->getChildren()
+									|> new \MarkdownRenderable($this->renderer_struct, $$)
+							)
+						}</dd>
 					</x:frag>
 				)}
 			</dl>;
