@@ -63,7 +63,7 @@ class Index extends Common {
 					<h2>Projects on this site</h2>
 					<ul class="horz bulleted group">
 						<li>Visit the <a href="./projects">Projects Page</a></li>
-						<li>Scroll down to see <a href="./projects">Recent Work</a>&nbsp;&#x02193;</li>
+						<li>Scroll down to see <a href="#recent_work">Recent Work</a>&nbsp;&#x02193;</li>
 					</ul>
 					<h2>Presence Elsewhere</h2>
 					<ul class="horz group logo-farm">
@@ -74,7 +74,7 @@ class Index extends Common {
 					</ul>
 					<dl>
 						<dt>Email:</dt>
-						<dd>pick any name with domain lam.io, they all go to me</dd>
+						<dd>&#60;my name&#62;@lam.io</dd>
 						<dt>Resume:</dt>
 						<dd><a href="resume.pdf">everything here, but smaller</a></dd>
 					</dl>
@@ -83,7 +83,7 @@ class Index extends Common {
 			<section id="work">
 				<div id="work_content_wrapper">
 					<section id="projects">
-						<h1>Recent Work</h1>
+						<h1 id="recent_work">Recent Work</h1>
 						<a href="projects.php" class="work-cta button-like" style="border-color:#FFF">All Projects</a>
 						<h2>Recent Projects</h2>
 						<ul class="isotope horz" id="ongoing_project_list">

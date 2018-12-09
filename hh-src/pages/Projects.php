@@ -31,6 +31,7 @@ class Projects extends Common {
 			<section id="main_content" class="group">
 				<header id="principal_header">
 					<h1>Projects</h1>
+					<p>Past jobs here too, provided that I have permission to show them.</p>
 				</header>
 				<section id="main_body">
 					<nav id="controls_container">
