@@ -111,7 +111,7 @@ class Writing extends Common {
 										{ Vec\map($categories, $cat ==> <li>{$cat as \XHPChild}</li>) }
 									</ul>;
 								}
-								if($meta === null || $meta['featured'] === false) {
+								if($meta === null || !array_key_exists('featured', $meta) || $meta['featured'] === false) {
 									$thumb = $bag['thumb'] != null ? "blog_assets/{$bag['thumb']}" : '';
 									return <article class="unfeatured">
 										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
