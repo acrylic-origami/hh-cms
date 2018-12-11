@@ -25,6 +25,15 @@ class Projects extends Common {
 		// Note: most of this is self-plagiarized from Writing.php
 		$content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . "/../../public/project_assets")
 			|> Vec\sort($$, ($a, $b) ==> $b['mtime'] - $a['mtime']);
+			
+		$min_time = $content[count($content) - 1]['mtime'];
+		$max_time = $content[0]['mtime'];
+		$slider_control = <div class="slider-proxy">
+			<div class="slider-thumb-proxy"></div>
+			<input type="range" id="control_daterange_left" class="slider-left" step={86400.0} value={strval($min_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
+			<input type="range" id="control_daterange_right" class="slider-right" step={86400.0} value={strval($max_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
+		</div>;
+		
 		return <x:frag>
 			<header>
 				<a href="#main_content" id="skip_to_main">Skip to main content</a>
@@ -55,11 +64,7 @@ class Projects extends Common {
 							</li>
 							<li>
 								<label class="header-3" for="control-daterange-left">Date range</label>
-								<div class="slider-proxy">
-									<div class="slider-thumb-proxy"></div>
-									<input type="range" id="control-daterange-left" class="slider-left" step={86400.0} min={strval($content[count($content) - 1]['mtime'])} max={strval($content[0]['mtime'])} />
-									<input type="range" class="slider-right" step={86400.0} min={strval($content[count($content) - 1]['mtime'])} max={strval($content[0]['mtime'])} />
-								</div>
+								{$slider_control}
 							</li>
 						</ul>
 					</nav>
@@ -84,7 +89,10 @@ class Projects extends Common {
 								// 	</ul>;
 								// }
 								$thumb = $bag['thumb'] != null ? "project_assets/{$bag['thumb']}" : '';
-								return <article>
+								return <article class="post"
+									data-mtime={$bag['mtime']}
+									data-ctime={$bag['ctime']}
+								>
 									<a href={"/projects/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
 									<header>
 										<a href={"/projects/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>

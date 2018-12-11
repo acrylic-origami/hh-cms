@@ -23,6 +23,15 @@ class Writing extends Common {
 	public function render_body(): \XHPRoot {
 		$content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . "/../../public/blog_assets")
 			|> Vec\sort($$, ($a, $b) ==> $b['mtime'] - $a['mtime']);
+			
+		$min_time = $content[count($content) - 1]['mtime'];
+		$max_time = $content[0]['mtime'];
+		$slider_control = <div class="slider-proxy">
+			<div class="slider-thumb-proxy"></div>
+			<input type="range" id="control_daterange_left" class="slider-left" step={86400.0} value={strval($min_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
+			<input type="range" id="control_daterange_right" class="slider-right" step={86400.0} value={strval($max_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
+		</div>;
+		
 		return <x:frag>
 			<header>
 				<a href="#main_content" id="skip_to_main">Skip to main content</a>
@@ -41,14 +50,26 @@ class Writing extends Common {
 					<nav id="controls_container">
 						<h2>Options</h2>
 						<ul>
-							<li>
+							<li class="group">
 								<div class="labeled-select-container">
-									<label class="header-3" for="control-sortby">Sort</label>
+									<label class="header-3" for="control_sortby">Sort</label>
 									<div class="select-wrapper">
-										<select id="control-sortby">
+										{null /* HH_IGNORE_ERROR[4053] autocomplete needed for `selected` on FF, also wow this fix sucks. */}<select id="control_sortby">
 											<option value="chronological">Chronological</option>
-											<option value="reverse-chronological">Reverse Chronological</option>
+											<option value="reverse-chronological" selected={true}>Reverse Chronological</option>
 											<option value="views">Views</option>
+										</select>
+									</div>
+								</div>
+							</li>
+							<li class="group">
+								<div class="labeled-select-container">
+									<label class="header-3" for="control_show">Show</label>
+									<div class="select-wrapper">
+										<select id="control_show">
+											<option value="all">All articles</option>
+											<option value="featured">Only featured</option>
+											<option value="unfeatured">Only unfeatured</option>
 										</select>
 									</div>
 								</div>
@@ -72,9 +93,9 @@ class Writing extends Common {
 											},
 											keyset[])
 											|> Vec\map($$, $cat ==> {
-												$key = strtolower(str_replace([' ', '/', '-'], ['_'], $cat));
+												$key = \str_replace(' ', '_', $cat);
 												return <li>
-													<input type="checkbox" id={"cat_{$key}"} />
+													<input type="checkbox" class="control-cat" id={"cat_{$key}"} value={$key} />
 													<label for={"cat_{$key}"}>{$cat}</label>
 													<span class="count"></span>
 												</li>;
@@ -86,11 +107,7 @@ class Writing extends Common {
 								<header>
 									<h3>Date published</h3>
 								</header>
-								<div class="slider-proxy">
-									<div class="slider-thumb-proxy"></div>
-									<input type="range" class="slider-left" />
-									<input type="range" class="slider-right" />
-								</div>
+								{$slider_control}
 							</li>
 						</ul>
 					</nav>
@@ -107,48 +124,52 @@ class Writing extends Common {
 								$x_content = new \MarkdownRenderable($this->renderer_struct, Vec\slice($bag['content']->getChildren(), $content_offset, 5));
 								$meta = $bag['meta'];
 								$x_cats = '';
+								$categories = [];
 								if($meta != null) {
 									$categories = $meta['categories'] ?? [];
 									invariant(is_array($categories), '');
+									$categories = Vec\map($categories, $cat ==> str_replace(' ', '_', $cat));
 									$x_cats = <ul class="horz post-categories group">
 										{ Vec\map($categories, $cat ==> <li>{$cat as \XHPChild}</li>) }
 									</ul>;
 								}
-								if($meta === null || !array_key_exists('featured', $meta) || $meta['featured'] === false) {
-									$thumb = $bag['thumb'] != null ? "blog_assets/{$bag['thumb']}" : '';
-									return <article class="unfeatured">
-										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
-										<header>
-											<a href={"/blog/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
-											{$x_cats}
-											<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
-										</header>
-										<div class="post-body">
-											{$x_content}
-										</div>
-									</article>;
+								$featured = $meta !== null && array_key_exists('featured', $meta) && $meta['featured'] === true;
+								
+								$thumb = '';
+								if($featured) {
+									$thumb = $bag['hero'] != null ? "blog_assets/{$bag['hero']}" : '';
 								}
 								else {
-									$thumb = $bag['hero'] != null ? "blog_assets/{$bag['hero']}" : '';
-									return <article class="featured">
-										<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
-										<header>
-											<a href={"/blog/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
-											{$x_cats}
-											<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
+									$thumb = $bag['thumb'] != null ? "blog_assets/{$bag['thumb']}" : '';
+								}
+								return <article class={"post ".($featured ? '' : 'un')."featured"}
+									data-category={Str\join($categories, ' ')}
+									data-mtime={$bag['mtime']}
+									data-ctime={$bag['ctime']}
+								>
+									<a href={"/blog/{$bag['location']}"} target="_blank"><div class="thumb" style={"background-image:url({$thumb});"}></div></a>
+									<header>
+										<a href={"/blog/{$bag['location']}"} target="_blank"><h2>{$title}</h2></a>
+										{$x_cats}
+										<div class="post-date">{date("M j, Y", $bag['mtime'])}</div>
+										{
+											$featured ? 
 											<div class="ctas">
 												<a href={"/blog/{$bag['location']}"}>Read more &rarr;</a>
 												<span class="collapse"></span>
-											</div>
-										</header>
-										<div class="post-body">
-											{$x_content}
-										</div>
+											</div> : ''
+										}
+									</header>
+									<div class="post-body">
+										{$x_content}
+									</div>
+									{
+										$featured ? 
 										<div class="readmore-container">
 											<a href={"blog/{$bag['location']}"} style="border-color:#000;" class="button-like">Read more &rarr;</a>
-										</div>
-									</article>;
-								}
+										</div> : ''
+									}
+								</article>;
 							})
 						}
 					</div>
