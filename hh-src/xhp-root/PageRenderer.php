@@ -11,6 +11,7 @@ class PageRenderer {
 						<link rel="icon" href="/img/graphics/favicon.ico" type="image/x-icon" />
 						{Vec\map($page->get_style_deps(), ($href) ==> <link rel="stylesheet" type="text/css" href={$href} />)}
 						{Vec\map($page->get_js_deps(), ($href) ==> <script type="text/javascript" src={$href} />)}
+						<title>{$page->get_title()}</title>
 					</head>
 					
 					<body>

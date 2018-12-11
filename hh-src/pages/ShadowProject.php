@@ -25,6 +25,11 @@ class ShadowProject extends Common {
 			 
 		];
 	}
+	<<__Override>>
+	public function get_title(): string {
+		$title = LamIO\CMS\plaintext_title_from_AST($this->post['content']);
+		return "{$title} - Derek Lam";
+	}
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
 		$ast_title = LamIO\CMS\title_from_AST($this->post['content']);

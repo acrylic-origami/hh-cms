@@ -11,6 +11,9 @@ class Index extends Common {
 	public function get_js_deps(): vec<string> {
 		return vec["js/index.main.js"];
 	}
+	public function get_title(): string {
+		return 'Derek Lam';
+	}
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
 		$projects_content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . '/../../public/project_assets');

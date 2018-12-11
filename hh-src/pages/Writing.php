@@ -16,6 +16,9 @@ class Writing extends Common {
 			"js/index.writing.js",
 		];
 	}
+	public function get_title(): string {
+		return 'Writing - Derek Lam';
+	}
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
 		$content = LamIO\CMS\content_iterator($this->renderer_struct, __DIR__ . "/../../public/blog_assets")

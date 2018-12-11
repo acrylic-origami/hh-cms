@@ -25,4 +25,5 @@ abstract class Common implements Page {
 	public function get_style_deps(): vec<string> {
 		return Vec\concat(self::COMMON_FONTS, vec["/css/common.css"]);
 	}
+	public function get_title(): string { return ''; }
 }

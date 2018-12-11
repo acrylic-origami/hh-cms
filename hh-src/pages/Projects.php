@@ -16,6 +16,10 @@ class Projects extends Common {
 			"js/index.projects.js",
 		];
 	}
+	<<__Override>>
+	public function get_title(): string {
+		return 'Projects - Derek Lam';
+	}
 	<<__Memoize>>
 	public function render_body(): \XHPRoot {
 		// Note: most of this is self-plagiarized from Writing.php
