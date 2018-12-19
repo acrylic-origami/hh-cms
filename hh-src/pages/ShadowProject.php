@@ -91,8 +91,8 @@ class ShadowProject extends Common {
 				<section class="aux-pane">
 					{$x_meta}
 				</section>
-				<section class="aux-pane">
-				</section>
+				<!--section class="aux-pane">
+				</section-->
 			</section>
 			<ui:footer />
 		</x:frag>;
