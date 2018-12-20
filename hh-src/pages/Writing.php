@@ -26,10 +26,11 @@ class Writing extends Common {
 			
 		$min_time = $content[count($content) - 1]['mtime'];
 		$max_time = $content[0]['mtime'];
+		$upper_time = \ceil(($max_time - $min_time) / 86400) * 86400 + $min_time; // slightly larger than max time to account for snapping in the range input
 		$slider_control = <div class="slider-proxy">
 			<div class="slider-thumb-proxy"></div>
-			<input type="range" id="control_daterange_left" class="slider-left" step={86400.0} value={strval($min_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
-			<input type="range" id="control_daterange_right" class="slider-right" step={86400.0} value={strval($max_time)} min={strval($min_time)} max={strval(\ceil(($max_time - $min_time) / 86400) * 86400 + $min_time)} />
+			<input type="range" id="control_daterange_left" class="slider-left" step={86400.0} value={strval($min_time)} min={strval($min_time)} max={strval($upper_time)} />
+			<input type="range" id="control_daterange_right" class="slider-right" step={86400.0} value={strval($upper_time)} min={strval($min_time)} max={strval($upper_time)} />
 		</div>;
 		
 		return <x:frag>
