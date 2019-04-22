@@ -1,6 +1,6 @@
 <?hh // strict
-require_once(__DIR__ . '/../../vendor/hh_autoload.php');
-<<__Entrypoint>>
+require_once(__DIR__ . '/../../vendor/hh_autoload.hh');
+<<__EntryPoint>>
 function shadow_blog(): void {
 	/* HH_IGNORE_ERROR[2050] */
 	$path = __DIR__ . '/../../public/blog_assets' . substr($_SERVER['REQUEST_URI'], strlen('/blog'));

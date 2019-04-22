@@ -1,7 +1,8 @@
 {
     "require": {
         "facebook/fbmarkdown": "^1.4",
-        "facebook/xhp-lib": "^2.8"
+        "facebook/xhp-lib": "^2.8",
+        "hhvm/hhvm-autoload": "^2.0"
     },
     "autoload": {
     	"psr-4": {

@@ -1,7 +1,7 @@
 <?hh // strict
 use namespace Facebook\Markdown;
 use namespace HH\Lib\{C, Str, Vec};
-require_once(__DIR__ . '/../vendor/hh_autoload.php');
+require_once(__DIR__ . '/../vendor/hh_autoload.hh');
 class Main {
 	protected Markdown\ParserContext $pctx;
 	protected Markdown\RenderContext $rctx;
@@ -28,7 +28,7 @@ class Main {
 		}
 	}
 }
-<<__Entrypoint>>
+<<__EntryPoint>>
 function index(): void {
 	// \xhprof_enable(); // \XHPROF_FLAGS_CPU + \XHPROF_FLAGS_MEMORY
 	echo PageRenderer::render(new \Index());

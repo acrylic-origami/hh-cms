@@ -50,8 +50,8 @@ function content_iterator(MDRendererStruct<string> $renderer_struct, string $roo
 					'content' => $ast, // new \MarkdownRenderable($renderer_struct, Vec\slice($ast->getChildren(), $content_offset, 5)),
 					'ctime' => \filectime("{$root_path}/{$basepath}.md"),
 					'mtime' => \filemtime("{$root_path}/{$basepath}.md"),
-					'hero' => \ltrim($hero_path, '/'),
-					'thumb' => \ltrim($thumb_path, '/'),
+					'hero' => \is_null($hero_path) ? null : \ltrim($hero_path, '/'),
+					'thumb' => \is_null($thumb_path) ? null : \ltrim($thumb_path, '/'),
 					'meta' => $meta
 				)]);
 			}
